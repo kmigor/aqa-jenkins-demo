@@ -1,8 +1,6 @@
 pipeline {
     agent none
-    tools {
-        maven 'Maven'
-    }
+
     stages {
 
         stage('Checkout') {
@@ -11,24 +9,36 @@ pipeline {
                 checkout scm
             }
         }
+
         stage('Run API Tests') {
-            agent any
-            steps {
-                sh 'mvn -Dtest=ApiTest clean test'
-            }
-        }
-        stage('Run UI Tests') {
             agent {
                 docker {
-                    image 'selenium/standalone-chrome:latest'
+                    image 'maven:3.9-eclipse-temurin-17'
                     args '-v /var/jenkins_home/.m2:/root/.m2'
                     reuseNode true
                 }
             }
             steps {
+                sh 'mvn -Dtest=ApiTest clean test'
+            }
+        }
+
+        stage('Run UI Tests') {
+            agent {
+                docker {
+                    image 'maven:3.9-eclipse-temurin-17'
+                    args '-v /var/jenkins_home/.m2:/root/.m2'
+                    reuseNode true
+                }
+            }
+            environment {
+                SELENIUM_REMOTE_URL = 'http://selenium:4444/wd/hub'
+            }
+            steps {
                 sh 'mvn -Dtest=UITest clean test'
             }
         }
+
         stage('Allure Report') {
             agent any
             steps {

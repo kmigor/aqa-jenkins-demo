@@ -12,6 +12,7 @@ public class UITest {
     @Test
     @Tag("smoke")
     void googleTitleTest(){
+        Configuration.remote = System.getenv("SELENIUM_REMOTE_URL");
         Configuration.headless = true;
         open("https://ru.wikipedia.org/wiki/");
         $(byText("Википедию")).shouldBe(visible);
