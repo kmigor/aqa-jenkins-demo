@@ -1,6 +1,10 @@
 pipeline {
     agent none
 
+    tools {
+        allure 'Allure'
+    }
+
     stages {
 
         stage('Checkout') {
@@ -42,7 +46,7 @@ pipeline {
         stage('Allure Report') {
             agent any
             steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'target/allure-results']]
+                allure includeProperties: false, results: [[path: 'target/allure-results']]
             }
         }
     }
