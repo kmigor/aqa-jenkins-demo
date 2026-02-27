@@ -27,7 +27,7 @@ pipeline {
             agent {
                 docker {
                     image 'maven:3.9-eclipse-temurin-17'
-                    args '-v /var/jenkins_home/.m2:/root/.m2'
+                    args '--network jenkins-docker_default -v /var/jenkins_home/.m2:/root/.m2'
                     reuseNode true
                 }
             }
