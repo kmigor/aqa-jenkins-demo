@@ -104,14 +104,19 @@ pipeline {
                        results: [[path: 'target/allure-results']]
             }
         }
-    }
 
-    post {
-        always {
-            node {
+        stage('Archive Results') {
+            agent any
+            steps {
                 junit 'target/surefire-reports/*.xml'
                 archiveArtifacts artifacts: 'target/**/*.log', fingerprint: true
             }
+        }
+    }
+
+    post {
+        failure {
+            echo "Build failed"
         }
     }
 }
