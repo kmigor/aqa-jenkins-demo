@@ -15,7 +15,13 @@ pipeline {
         }
 
         stage('Build') {
-        agent any
+            agent {
+                docker {
+                    image 'maven:3.9-eclipse-temurin-17'
+                    args '-v /var/jenkins_home/.m2:/root/.m2'
+                    reuseNode true
+                }
+            }
             steps {
                 sh 'mvn clean'
             }
