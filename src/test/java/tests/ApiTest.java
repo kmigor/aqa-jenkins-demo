@@ -1,26 +1,30 @@
 package tests;
 
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Tag;
-import io.qameta.allure.Description;
+import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
+@Epic("API")
+@Feature("Posts API")
+@Tag("api")
 public class ApiTest {
+
     @Test
     @Tag("smoke")
-    @Description("Check that post API returns 200")
+    @Severity(SeverityLevel.CRITICAL)
+    @Owner("QA Team")
+    @Description("Check that GET /posts/1 returns 200 and correct id")
     void getPost_shouldReturn200() {
+
         given()
                 .baseUri("https://jsonplaceholder.typicode.com")
-        .when()
-                .get("/post/1")
-        .then()
-                .statusCode(404);
-//                .body("id",equalTo(1));
-
-
+                .when()
+                .get("/posts/1")
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(1));
     }
-
 }

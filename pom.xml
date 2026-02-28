@@ -66,6 +66,9 @@
                     <systemPropertyVariables>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
                     </systemPropertyVariables>
+                    <rerunFailingTestsCount>1</rerunFailingTestsCount>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <groups>${groups}</groups>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
