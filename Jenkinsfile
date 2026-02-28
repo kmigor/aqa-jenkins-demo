@@ -14,6 +14,12 @@ pipeline {
             }
         }
 
+        stage('Build') {
+            steps {
+                sh 'mvn clean'
+            }
+        }
+
         stage('Run API Tests') {
             agent {
                 docker {
@@ -23,7 +29,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn -Dtest=ApiTest clean test'
+                sh 'mvn -Dtest=ApiTest test'
             }
         }
 
@@ -39,7 +45,7 @@ pipeline {
                 SELENIUM_REMOTE_URL = 'http://selenium:4444/wd/hub'
             }
             steps {
-                sh 'mvn -Dtest=UITest clean test'
+                sh 'mvn -Dtest=UITest test'
             }
         }
 
