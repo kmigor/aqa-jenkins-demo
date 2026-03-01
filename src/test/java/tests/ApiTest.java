@@ -15,8 +15,7 @@ public class ApiTest {
     @Test
     @Tag("smoke")
     @Severity(SeverityLevel.CRITICAL)
-    @Owner("QA Team")
-    @Description("Check that GET /posts/1 returns 200 and correct id")
+    @Description("API smoke test for PR")
     void getPost_shouldReturn200() {
 
         given()

@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Condition.*;
 
 @Epic("UI")
-@Feature("Wikipedia Main Page")
+@Feature("Wikipedia")
 @Tag("ui")
 public class UITest {
 
@@ -28,12 +28,27 @@ public class UITest {
     @Test
     @Tag("smoke")
     @Severity(SeverityLevel.CRITICAL)
-    @Owner("QA Team")
-    @Description("Verify Wikipedia main page loads correctly")
-    void wikipediaMainPageTest() {
-
+    @Description("UI smoke test for PR")
+    void wikipediaSmokeTest() {
         open("https://ru.wikipedia.org/wiki/Заглавная_страница");
-
         $(byText("Википедию")).shouldBe(visible);
+    }
+
+    @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("UI regression test for nightly")
+    void wikipediaSearchTest() {
+        open("https://ru.wikipedia.org/wiki/Заглавная_страница");
+        $("#searchInput").setValue("Selenide").pressEnter();
+        $(byText("Selenide")).shouldBe(visible);
+    }
+
+    @Test
+    @Tag("e2e")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Manual E2E test")
+    void e2eTest() {
+        open("https://example.com");
     }
 }

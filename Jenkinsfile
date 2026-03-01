@@ -11,41 +11,58 @@ pipeline {
     }
 
     parameters {
-        choice(name: 'TEST_SCOPE', choices: ['all','api','ui','smoke'])
+        choice(name: 'RUN_TYPE',
+               choices: ['pr', 'nightly', 'manual'])
         booleanParam(name: 'HEADLESS', defaultValue: true)
+    }
+
+    triggers {
+        cron('H 2 * * *')
     }
 
     stages {
 
         stage('Checkout') {
-            steps {
-                checkout scm
-            }
+            steps { checkout scm }
         }
 
-        stage('Clean') {
-            steps {
-                sh 'mvn clean'
-            }
+        stage('Build') {
+            steps { sh 'mvn clean install -DskipTests' }
         }
 
-        stage('Tests') {
+        stage('PR Tests') {
+            when { expression { params.RUN_TYPE == 'pr' } }
             parallel {
 
-                stage('API') {
-                    steps {
-                        sh "mvn test -Dgroups=api"
-                    }
+                stage('API Smoke') {
+                    steps { sh 'mvn test -Dgroups=api,smoke' }
                 }
 
-                stage('UI') {
+                stage('UI Smoke') {
                     environment {
                         SELENIUM_REMOTE_URL = 'http://selenium:4444/wd/hub'
                     }
                     steps {
-                        sh "mvn test -Dgroups=ui -Dheadless=${params.HEADLESS}"
+                        sh "mvn test -Dgroups=ui,smoke -Dheadless=${params.HEADLESS}"
                     }
                 }
+            }
+        }
+
+        stage('Nightly UI Regression') {
+            when { triggeredBy 'TimerTrigger' }
+            environment {
+                SELENIUM_REMOTE_URL = 'http://selenium:4444/wd/hub'
+            }
+            steps {
+                sh "mvn test -Dgroups=ui,regression"
+            }
+        }
+
+        stage('Manual E2E') {
+            when { expression { params.RUN_TYPE == 'manual' } }
+            steps {
+                sh "mvn test -Dgroups=e2e"
             }
         }
 
@@ -56,10 +73,10 @@ pipeline {
             }
         }
     }
+
     post {
         always {
             junit 'target/surefire-reports/*.xml'
-             archiveArtifacts artifacts: 'target/**/*.log', fingerprint: true, allowEmptyArchive: true
         }
     }
 }
