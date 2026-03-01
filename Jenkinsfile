@@ -61,6 +61,9 @@ pipeline {
 
         stage('Manual E2E') {
             when { expression { params.RUN_TYPE == 'manual' } }
+            environment {
+                SELENIUM_REMOTE_URL = 'http://selenium:4444/wd/hub'
+            }
             steps {
                 sh "mvn test -Dgroups=e2e"
             }
