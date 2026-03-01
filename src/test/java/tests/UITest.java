@@ -17,12 +17,18 @@ public class UITest {
 
     @BeforeAll
     static void setup() {
-        Configuration.remote = System.getenv("SELENIUM_REMOTE_URL");
+
+        String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
+
+        if (remoteUrl != null && !remoteUrl.isEmpty()) {
+            Configuration.remote = remoteUrl;
+        }
+
+        Configuration.browser = "chrome";
         Configuration.headless = Boolean.parseBoolean(
                 System.getProperty("headless", "true")
         );
         Configuration.browserSize = "1920x1080";
-        Configuration.timeout = 10000;
     }
 
     @Test
