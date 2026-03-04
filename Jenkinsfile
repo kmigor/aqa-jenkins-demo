@@ -1,6 +1,6 @@
 pipeline {
 
-    agent none
+    agent any
 
     options {
         timestamps()
@@ -31,7 +31,7 @@ pipeline {
             agent any
             steps {
                 checkout scm
-                stash name: 'source', includes: '/*'
+                stash name: 'source', includes: '**/*'
             }
         }
 
@@ -146,7 +146,7 @@ pipeline {
             allure includeProperties: false,
                                        results: [[path: 'target/allure-results']]
 
-            archiveArtifacts artifacts: 'target//*.log', fingerprint: true
+            archiveArtifacts artifacts: 'target/*.log', fingerprint: true
 
             cleanWs()
         }
