@@ -19,8 +19,10 @@ pipeline {
     }
 
     triggers {
-        cron('H */2 * * *')   // Smoke every 2 hours
-        cron('H 0 * * *')     // Regression at midnight
+        cron('''
+            H */2 * * *
+            H 0 * * *
+        ''')
     }
 
     stages {
