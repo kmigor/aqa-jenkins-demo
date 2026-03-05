@@ -164,12 +164,9 @@ pipeline {
     post {
         always {
             junit 'target/surefire-reports/*.xml'
-
             allure includeProperties: false,
-                                       results: [[path: 'target/allure-results']]
-
-            archiveArtifacts artifacts: 'target/*.log', fingerprint: true
-
+                   results: [[path: 'target/allure-results']]
+            archiveArtifacts artifacts: 'target/**/*.log', allowEmptyArchive: true
             cleanWs()
         }
     }
