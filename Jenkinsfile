@@ -19,10 +19,7 @@ pipeline {
     }
 
     triggers {
-        cron('''
-            H */2 * * *
-            H 0 * * *
-        ''')
+        cron('*/2 * * * *')
     }
 
     stages {
@@ -92,13 +89,7 @@ pipeline {
 
         stage('UI Regression (Midnight)') {
             when {
-                allOf {
-                    triggeredBy 'TimerTrigger'
-                    expression {
-                        def hour = new Date().format("H", TimeZone.getTimeZone('UTC'))
-                        hour == "0"
-                    }
-                }
+                triggeredBy 'TimerTrigger'
             }
 
             agent {
