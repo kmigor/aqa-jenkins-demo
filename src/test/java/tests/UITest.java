@@ -19,13 +19,19 @@ public class UITest {
     static void setup() {
 
         Configuration.browser = "chrome";
-        Configuration.remote = System.getProperty("selenide.remote");
 
-        Configuration.headless = Boolean.parseBoolean(
-                System.getProperty("headless", "true")
-        );
+        String remote = System.getProperty("selenide.remote");
+
+        if (remote != null && !remote.isEmpty()) {
+            Configuration.remote = remote;
+        }
+
+        Configuration.headless =
+                Boolean.parseBoolean(System.getProperty("headless", "true"));
 
         Configuration.browserSize = "1920x1080";
+
+        System.out.println("REMOTE = " + System.getProperty("selenide.remote"));
     }
 
     @Test

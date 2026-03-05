@@ -72,6 +72,10 @@
                         <junit.jupiter.tags.include>
                             ${groups}
                         </junit.jupiter.tags.include>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <selenide.remote>${selenide.remote}</selenide.remote>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <headless>${headless}</headless>
                     </systemPropertyVariables>
 
                     <rerunFailingTestsCount>1</rerunFailingTestsCount>

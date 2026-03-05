@@ -73,6 +73,8 @@ pipeline {
                     steps {
                         unstash 'source'
                         sh "curl http://selenium:4444/status"
+                        sh "echo Remote = http://selenium:4444/wd/hub"
+                        sh "mvn -version"
                         timeout(time: 30, unit: 'MINUTES') {
                             retry(2) {
                                 sh """
@@ -113,6 +115,9 @@ pipeline {
 
             steps {
                 unstash 'source'
+                sh "curl http://selenium:4444/status"
+                sh "echo Remote = http://selenium:4444/wd/hub"
+                sh "mvn -version"
                 timeout(time: 45, unit: 'MINUTES') {
                     retry(2) {
                         sh """
@@ -144,6 +149,9 @@ pipeline {
 
             steps {
                 unstash 'source'
+                sh "curl http://selenium:4444/status"
+                sh "echo Remote = http://selenium:4444/wd/hub"
+                sh "mvn -version"
                 sh """
                 mvn -B test \
                 -Dgroups=e2e \
