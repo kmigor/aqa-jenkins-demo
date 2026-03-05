@@ -55,7 +55,7 @@ pipeline {
                     }
                     steps {
                         unstash 'source'
-                        sh 'mvn -B test -Dgroups=api,smoke'
+                        sh 'mvn -B test -Dgroups=ApiSmoke'
                     }
                 }
 
@@ -79,8 +79,8 @@ pipeline {
                             retry(2) {
                                 sh """
                                 mvn -B test \
-                                -Dgroups=ui,smoke \
-                                -Dselenide.remote=http://selenium:4444/wd/hub \
+                                -Dgroups=UISmoke \
+                                -Dselenide.remote=$SELENIUM_REMOTE_URL \
                                 -Dheadless=${params.HEADLESS}
                                 """
                             }
@@ -122,8 +122,8 @@ pipeline {
                     retry(2) {
                         sh """
                         mvn -B test \
-                        -Dgroups=ui,regression \
-                        -Dselenide.remote=http://selenium:4444/wd/hub
+                        -Dgroups=regression \
+                        -Dselenide.remote=$SELENIUM_REMOTE_URL
                         """
                     }
                 }
@@ -155,7 +155,7 @@ pipeline {
                 sh """
                 mvn -B test \
                 -Dgroups=e2e \
-                -Dselenide.remote=http://selenium:4444/wd/hub
+                -Dselenide.remote=$SELENIUM_REMOTE_URL
                 """
             }
         }

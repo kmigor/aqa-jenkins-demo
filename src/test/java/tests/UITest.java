@@ -12,30 +12,33 @@ import static com.codeborne.selenide.Condition.*;
 
 @Epic("UI")
 @Feature("Wikipedia")
-@Tag("ui")
 public class UITest {
 
     @BeforeAll
     static void setup() {
+        Configuration.timeout = 10000;
+        Configuration.pageLoadStrategy = "eager";
 
         Configuration.browser = "chrome";
 
         String remote = System.getProperty("selenide.remote");
 
-        if (remote != null && !remote.isEmpty()) {
-            Configuration.remote = remote;
+        if (remote == null || remote.isEmpty()) {
+            remote = "http://selenium:4444/wd/hub";
         }
+
+        Configuration.remote = remote;
 
         Configuration.headless =
                 Boolean.parseBoolean(System.getProperty("headless", "true"));
 
         Configuration.browserSize = "1920x1080";
 
-        System.out.println("REMOTE = " + System.getProperty("selenide.remote"));
+        System.out.println("REMOTE = " + Configuration.remote);
     }
 
     @Test
-    @Tag("smoke")
+    @Tag("UISmoke")
     @Severity(SeverityLevel.CRITICAL)
     @Description("UI smoke test for PR")
     void wikipediaSmokeTest() {

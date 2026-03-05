@@ -9,11 +9,10 @@ import static org.hamcrest.Matchers.*;
 
 @Epic("API")
 @Feature("Posts API")
-@Tag("api")
 public class ApiTest {
 
     @Test
-    @Tag("smoke")
+    @Tag("ApiSmoke")
     @Severity(SeverityLevel.CRITICAL)
     @Description("API smoke test for PR")
     void getPost_shouldReturn200() {
