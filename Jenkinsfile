@@ -72,9 +72,15 @@ pipeline {
                     }
                     steps {
                         unstash 'source'
+                        sh "curl http://selenium:4444/status"
                         timeout(time: 30, unit: 'MINUTES') {
                             retry(2) {
-                                sh "mvn -B test -Dgroups=ui,smoke -Dheadless=${params.HEADLESS}"
+                                sh """
+                                mvn -B test \
+                                -Dgroups=ui,smoke \
+                                -Dselenide.remote=http://selenium:4444/wd/hub \
+                                -Dheadless=${params.HEADLESS}
+                                """
                             }
                         }
                     }
@@ -109,7 +115,11 @@ pipeline {
                 unstash 'source'
                 timeout(time: 45, unit: 'MINUTES') {
                     retry(2) {
-                        sh 'mvn -B test -Dgroups=ui,regression'
+                        sh """
+                        mvn -B test \
+                        -Dgroups=ui,regression \
+                        -Dselenide.remote=http://selenium:4444/wd/hub
+                        """
                     }
                 }
             }
@@ -134,7 +144,11 @@ pipeline {
 
             steps {
                 unstash 'source'
-                sh 'mvn -B test -Dgroups=e2e'
+                sh """
+                mvn -B test \
+                -Dgroups=e2e \
+                -Dselenide.remote=http://selenium:4444/wd/hub
+                """
             }
         }
     }

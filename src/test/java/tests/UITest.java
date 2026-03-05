@@ -18,16 +18,13 @@ public class UITest {
     @BeforeAll
     static void setup() {
 
-        String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
-
-        if (remoteUrl != null && !remoteUrl.isEmpty()) {
-            Configuration.remote = remoteUrl;
-        }
-
         Configuration.browser = "chrome";
+        Configuration.remote = System.getProperty("selenide.remote");
+
         Configuration.headless = Boolean.parseBoolean(
                 System.getProperty("headless", "true")
         );
+
         Configuration.browserSize = "1920x1080";
     }
 
